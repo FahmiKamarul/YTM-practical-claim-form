@@ -8,7 +8,7 @@ import pymupdf
 import pytest
 
 from claim.config import ConfigError, load_config, save_config
-from claim.questions import setup, suggested_prefix_for, unquote_dragged_path
+from claim.questions import ON_WINDOWS, setup, suggested_prefix_for, unquote_dragged_path
 from helpers import AHMAD, SITI, answers, make_pdf
 
 TOOL_FOLDER = Path(__file__).resolve().parent.parent
@@ -145,7 +145,8 @@ def test_setup_stores_full_path_of_dragged_in_form(tmp_path, monkeypatch):
     form = make_pdf(tmp_path / "(Stamped) YTM_BTEPV4.pdf", "No. Borang : BEP/02", "Versi : 2-01-2025")
     monkeypatch.chdir(tmp_path)
     path = tmp_path / "config.toml"
-    setup(path, answers("A", "", "2026-08-10", "2027-02-09", r"\(Stamped\)\ YTM_BTEPV4.pdf ", "", "", "", ""))
+    dragged = '"(Stamped) YTM_BTEPV4.pdf" ' if ON_WINDOWS else r"\(Stamped\)\ YTM_BTEPV4.pdf "
+    setup(path, answers("A", "", "2026-08-10", "2027-02-09", dragged, "", "", "", ""))
     assert load_config(path).form == str(form)
 
 
