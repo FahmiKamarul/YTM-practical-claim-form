@@ -24,6 +24,7 @@ def test_cli_defaults_sign_date_to_last_working_day(tmp_path, ahmad_config):
 @needs_form
 def test_cli_names_file_with_prefix_in_downloads(tmp_path, monkeypatch):
     monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("USERPROFILE", str(tmp_path))
     (tmp_path / "Downloads").mkdir()
     path = tmp_path / "config.toml"
     save_config(SITI, path)
